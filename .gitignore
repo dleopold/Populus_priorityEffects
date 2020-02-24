@@ -1,0 +1,7 @@
+output/
+data/MiSeq_raw
+data/referenceDBs
+.Rproj.user/
+Populus_priorityEffects.Rproj
+.Rhistory
+Rplots.pdf
