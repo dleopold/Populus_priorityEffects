@@ -1,12 +1,16 @@
 ## Repository notes
 
-This repository contains all of the code required to recreate the analyses presented in a scientific manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, currently in review.
+This repository contains all of the code required to recreate the analyses presented the manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, currently in review. 
 
-Assuming all dependencies are available (see below), typing `make analysis` will recreate the entire workflow by running the scripts in the `code/` folder in the proper order. The processed output of the bioinformatics processing of the raw Illumina marker gene sequencing (fungal ITS) is included, so it is possible to skip the bioinformatic processing of the raw sequencing reads and skip directly to the data analysis, e.g. `make analysis`. 
+Authors: Devin R. Leopold & Posy E. Busby
+
+
+
+Assuming all dependencies are available (see below), the entire workflow can be recreated by running recipies in the makefile, which will run the scripts in the `code/` folder in the proper order, writing all output to `output/`. The processed output of the bioinformatics processing of the raw Illumina marker gene sequencing (fungal ITS) is included, so it is possible to skip the bioinformatic processing of the raw sequencing reads and skip directly to the data analysis. 
 
 ### Dependencies
 
-Larger data files are not included in the repository and need to be downloaded.
+Larger data files are not included in the repository and need to be downloaded in order to reproduce the bioinformatics workflow. 
 
 * Raw MiSeq data
   * Download the raw MiSeq data in fastq format from the NCBI Sequence Read Archive, BioProjuect ID [PRJNA605581](https://www.ncbi.nlm.nih.gov/bioproject/605581)

@@ -4,7 +4,7 @@ makeNotes:
 	$(info make trim = remove primers and sequencing adapters) 
 	$(info make denoise = denoise with DADA2)
 	$(info make compile = merge libraries, add metadata and taxonomy)
-	$(info make analysis = run analyses and make figures for publication)
+	$(info make analysis = run analyses in R and make figures for publication)
 	
 clean:
 	rm -r output
