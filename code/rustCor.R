@@ -82,7 +82,7 @@ dat$variable_lab %<>% factor(.,levels=unique(.)[c(grep("*",.,fixed=T,invert = T)
 # Merge correlation test results and format for markdown
 cor.dat <- dat %>% select(variable,variable_lab) %>% unique() %>%
   left_join(pearsons) %>%
-  mutate(stats=paste0("*p*=",pval,"; ","*r*^(2)=",cor))
+  mutate(stats=paste0("*p*=",pval,"; ","*r*=",cor))
 #make figure
 ggplot(dat, aes(x=value,y=resid))+
   geom_point()+

@@ -53,6 +53,7 @@
 "Aureobasidium","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Dothideales","f__Aureobasidiaceae",NA,NA
 "OTU.103","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Filobasidiales","f__Filobasidiaceae","g__Filobasidium","s__wieringae"
 "OTU.79","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Tremellales","f__Bulleribasidiaceae","g__Vishniacozyma","s__victoriae"
+"OTU.88","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales",NA,NA,NA
 "OTU.255","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Cystofilobasidiales","f__Cystofilobasidiaceae","g__Cystofilobasidium","s__macerans"
 "OTU.140","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Cantharellales_fam_Incertae_sedis","g__Burgoa",NA
 "OTU.93","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Polyporales","f__Phanerochaetaceae","g__Hyphodermella","s__corrugata"
@@ -63,13 +64,12 @@
 "OTU.321","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Trechisporales","f__Hydnodontaceae","g__Brevicellicium","s__olivascens"
 "OTU.226","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Cantharellales_fam_Incertae_sedis","g__Sistotrema","s__brinkmannii"
 "OTU.182","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Cantharellales_fam_Incertae_sedis","g__Sistotrema","s__oblongisporum"
-"OTU.125","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales",NA,NA,NA
 "OTU.291","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Aspergillus",NA
 "OTU.181","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Ceratobasidiaceae",NA,NA
 "OTU.316","k__Fungi","p__Ascomycota","c__Leotiomycetes","o__Phacidiales","f__Phacidiaceae","g__Phacidium","s__pseudophacidioides"
 "OTU.284","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Hypocreales","f__Cordycipitaceae","g__Simplicillium","s__cylindrosporum"
-"OTU.102","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Polyporales","f__Steccherinaceae","g__Steccherinum",NA
-"OTU.308","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Teratosphaeriaceae","g__Catenulostroma",NA
+"OTU.63","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Pleosporales","f__Phaeosphaeriaceae","g__Phaeosphaeria","s__tofieldiae"
+"OTU.308","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Teratosphaeriaceae",NA,NA
 "OTU.188","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Aspergillus","s__penicillioides"
 "OTU.264","k__Fungi","p__Basidiomycota","c__Exobasidiomycetes","o__Golubeviales","f__Golubeviaceae","g__Golubevia","s__pallescens"
 "OTU.292","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Agaricales",NA,NA,NA
@@ -78,7 +78,7 @@
 "OTU.281","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Botryobasidiaceae","g__Botryobasidium","s__conspersum"
 "OTU.174","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Trechisporales","f__Hydnodontaceae","g__Subulicystidium","s__perlongisporum"
 "OTU.156","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales",NA,NA,NA
-"OTU.63","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Pleosporales","f__Phaeosphaeriaceae","g__Phaeosphaeria","s__tofieldiae"
+"OTU.102","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Polyporales","f__Steccherinaceae","g__Steccherinum",NA
 "OTU.81","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Pleosporales","f__Pleosporaceae","g__Alternaria","s__dactylidicola"
 "OTU.263","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Hymenochaetales","f__Rickenellaceae","g__Sidera","s__lenis"
 "OTU.142","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Atheliales","f__Atheliaceae","g__Athelia","s__epiphylla"
@@ -95,7 +95,7 @@
 "OTU.287","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Venturiales","f__Venturiaceae","g__Tothia","s__fuscella"
 "OTU.138","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Hypocreales","f__Cordycipitaceae","g__Lecanicillium","s__psalliotae"
 "OTU.353","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Trichocomaceae","g__Talaromyces","s__bacillisporus"
-"OTU.298","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Agaricales",NA,NA,NA
+"OTU.298","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Agaricales","f__Tricholomataceae","g__Mycena",NA
 "OTU.194","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Russulales","f__Stereaceae","g__Stereum","s__sanguinolentum"
 "OTU.230","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Agaricales","f__Strophariaceae","g__Deconica","s__citrispora"
 "OTU.179","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Agaricales","f__Tricholomataceae","g__Panellus","s__mitis"
@@ -103,7 +103,7 @@
 "OTU.107","k__Fungi","p__Basidiomycota","c__Malasseziomycetes","o__Malasseziales",NA,NA,NA
 "OTU.342","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Tremellales","f__Bulleribasidiaceae","g__Dioszegia","s__fristingensis"
 "OTU.262","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Tremellales","f__Bulleribasidiaceae","g__Dioszegia","s__hungarica"
-"OTU.177","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Cladosporiaceae","g__Rachicladosporium","s__antarcticum"
+"OTU.177","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Cladosporiaceae","g__Rachicladosporium",NA
 "OTU.225","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Diaporthales","f__Gnomoniaceae","g__Gnomoniopsis","s__fructicola"
 "OTU.233","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Cantharellales","f__Botryobasidiaceae","g__Botryobasidium",NA
 "OTU.318","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Russulales","f__Stereaceae",NA,NA
@@ -161,7 +161,7 @@
 "OTU.47","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Filobasidiales","f__Filobasidiaceae","g__Filobasidium","s__stepposum"
 "OTU.113","k__Fungi","p__Basidiomycota","c__Microbotryomycetes","o__Sporidiobolales","f__Sporidiobolaceae","g__Sporobolomyces","s__roseus"
 "OTU.96","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Aspergillus",NA
-"OTU.195","k__Fungi","p__Basidiomycota","c__Malasseziomycetes","o__Malasseziales","f__Malasseziaceae","g__Malassezia",NA
+"OTU.195","k__Fungi","p__Basidiomycota","c__Malasseziomycetes","o__Malasseziales","f__Malasseziaceae","g__Malassezia","s__restricta"
 "OTU.58","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Mycosphaerellaceae","g__Ramularia","s__mali"
 "Dioszegia","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Tremellales","f__Bulleribasidiaceae","g__Dioszegia","s__butyracea"
 "OTU.169","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Hymenochaetales","f__Schizoporaceae","g__Hyphodontia","s__pallidula"
@@ -176,7 +176,7 @@
 "OTU.123","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Polyporales","f__Meruliaceae","g__Phlebia","s__rufa"
 "OTU.244","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Russulales","f__Peniophoraceae","g__Peniophora",NA
 "OTU.305","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Russulales","f__Peniophoraceae","g__Peniophora",NA
-"OTU.106","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Aspergillus","s__montevidensis"
+"OTU.106","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Aspergillus",NA
 "OTU.250","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Russulales","f__Peniophoraceae","g__Peniophora",NA
 "OTU.77","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Hymenochaetales","f__Tubulicrinaceae","g__Tubulicrinis","s__glebulosus"
 "OTU.277","k__Fungi","p__Basidiomycota","c__Tremellomycetes","o__Cystofilobasidiales","f__Mrakiaceae","g__Itersonilia","s__pannonica"
@@ -192,7 +192,7 @@
 "OTU.265","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Penicillium",NA
 "OTU.66","k__Fungi","p__Ascomycota","c__Eurotiomycetes","o__Eurotiales","f__Aspergillaceae","g__Penicillium","s__simplicissimum"
 "OTU.228","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Hypocreales",NA,NA,NA
-"OTU.46","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Hypocreales",NA,NA,NA
+"OTU.46","k__Fungi","p__Ascomycota","c__Sordariomycetes","o__Hypocreales","f__Hypocreaceae","g__Monocillium",NA
 "OTU.334","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Auriculariales","f__Exidiaceae","g__Exidia",NA
 "OTU.279","k__Fungi","p__Basidiomycota","c__Agaricomycetes","o__Auriculariales","f__Exidiaceae","g__Exidia","s__glandulosa"
 "OTU.126","k__Fungi","p__Ascomycota","c__Dothideomycetes","o__Capnodiales","f__Mycosphaerellaceae",NA,NA

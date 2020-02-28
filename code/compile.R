@@ -85,9 +85,9 @@ phy %<>% prune_taxa(!contam.dat$contam,.)
 phy %<>% prune_samples(!grepl("NEG",sample_names(.)),.)
 
 #' ### Look at sequencing depth
-minDepth <- 4000
-data.frame(SeqDepth=sample_sums(phy), TP=factor(sample_data(phy)$Timepoint)) %>%
-  mutate(cutoff=SeqDepth>minDepth) %>%
+minDepth <- 5000
+data.frame(SeqDepth=sample_sums(phy), TP=factor(sample_data(phy)$Timepoint),Type=sample_data(phy)$Treatment ) %>%
+  mutate(cutoff=SeqDepth>minDepth,neg=ifelse(Type=="Negative","neg","pos"),TP=paste(TP,neg)) %>%
   ggplot(aes(x=TP, y=SeqDepth)) +
   geom_violin() +
   geom_point(aes(color=cutoff),position=position_jitter(width=0.1)) +

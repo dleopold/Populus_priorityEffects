@@ -13,7 +13,7 @@ loadPhyloseq <- function(){
     #Remove non-target taxa
     prune_taxa(taxa_names(.)!="Melampsora" & !grepl("OTU",taxa_names(.)),.) %>%
     #Remove two outlier samples that cause problems for model fitting
-    prune_samples(!(grepl("G6.T3.R4.TP1",sample_names(.))),.) %>%
+    #prune_samples(!(grepl("G6.T3.R4.TP1",sample_names(.))),.) #%>%
     #This sample has an order of magnitude greater Trichoderma which causes instability in the mvabund model
     prune_samples(!(grepl("G4.T2.R5.TP1",sample_names(.))),.)
 }
@@ -31,8 +31,6 @@ loadRust <- function(){
   dat$pctRust <- (dat$pctRust*(nrow(dat)-1)+0.5)/nrow(dat)
   return(dat)
     }
-
-
 
 #______________________________________________#
 ### apply bias correction to phyloseq object ###
@@ -81,7 +79,7 @@ annotation_custom2 <- function (grob, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax
 }
 
 #_____________________________#
-### alculate geometric mean ###
+### calculate geometric mean ###
 gm_mean <- function(x, na_rm = FALSE) {
   exp(mean(log(x), na.rm = na_rm))
 }

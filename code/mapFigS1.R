@@ -21,6 +21,6 @@ map <- make_bbox(points$Longitude,points$Latitud,f=0.35) %>%
 ggdraw()+
   draw_plot(map)+
   draw_image("data/500px-Populus_trichocarpa_range_map.svg.png",scale=1,width=0.32,x=0.52,y=0.24)
-ggsave("output/figs/Figs.S1.pdf",width=20,height=16,units="cm")
+ggsave("output/figs/Fig.S1.pdf",width=20,height=16,units="cm")
 
   

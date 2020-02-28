@@ -44,7 +44,7 @@ dbrda.treatment.r2 <- (eigenvals(dbrda.treatment)/sum(eigenvals(dbrda.treatment)
     ggplot(aes(x=x,y=y,fill=Treatment)) +
     geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
     geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
-    geom_point(size=5,shape=21)+
+    geom_point(size=4,shape=21)+
     annotate("text", x = -Inf, y = Inf, label = "(a)",hjust=-0.4, vjust=1.75, size=5)+
     scale_fill_manual(values=pal.treatment)+
     coord_fixed(eigenvals(dbrda.treatment)[2]/eigenvals(dbrda.treatment)[1])+
@@ -74,7 +74,7 @@ dbrda.genotype.r2 <- (eigenvals(dbrda.genotype)/sum(eigenvals(dbrda.genotype))) 
     ggplot(aes(x=x,y=y,fill=Region)) +
     geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
     geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
-    geom_point(size=5,shape=21)+
+    geom_point(size=4,shape=21)+
     annotate("text", x = -Inf, y = Inf, label = "(b)",hjust=-0.4, vjust=1.75, size=5)+
     scale_fill_manual(values=pal.region)+
     coord_fixed(eigenvals(dbrda.genotype)[2]/eigenvals(dbrda.genotype)[1])+

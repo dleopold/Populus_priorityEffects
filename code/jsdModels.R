@@ -5,7 +5,7 @@ library(mvabund)
 source("code/Rfunctions.R")
 
 #set seed for reproducability
-set.seed(32453)
+set.seed(32576)
 
 # load phyloseq data
 (phy <- loadPhyloseq())
@@ -46,7 +46,7 @@ mv.full <- manyglm(mvDat ~ Genotype*Treatment,
 # Test with anova.manyglm 
 # Using unstructured correlation matrix and wald tests.  
 # Including univariate test with adjustment for multiple testing.  
-mv.anova <- anova(mv.full, nBoot=4999, p.uni="adjusted", cor.type="R", test="wald")
+mv.anova <- anova(mv.full, nBoot=4999, p.uni="adjusted", cor.type="shrink", test="wald")
 
 # Save results 
 mv.anova$table %>% write.csv("output/tabs/mv.genotype.csv")
@@ -63,12 +63,12 @@ mv.region <- manyglm(mvDat ~ Region*Treatment,
                      data=data.frame(sample_data(phy)))
 
 #' ## Check model assumptions
-plot(mv.region)
-meanvar.plot(mvDat~sample_data(phy)$Region)
+#plot(mv.region)
+#meanvar.plot(mvDat~sample_data(phy)$Region)
 
 #' ## Test with anova.manyglm 
 #+ cache=T, results='asis'
-mv.region.anova <- anova(mv.region, nBoot=4999, p.uni="adjusted", cor.type="R", test="wald")
+mv.region.anova <- anova(mv.region, nBoot=4999, p.uni="adjusted", cor.type="shrink", test="wald")
 
 mv.region.anova$table %>% write.csv("output/tabs/mv.region.csv")
 saveRDS(mv.region.anova, "output/rds/mv.region.rds")
