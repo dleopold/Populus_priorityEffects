@@ -25,9 +25,65 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
   * Download the v3 genome [here](https://phytozome.jgi.doe.gov/pz/portal.html#!info?alias=Org_Ptrichocarpa_er).
   * Create an searchable database, using `bowtie2-build`, and move the indexed files to `data/referenceDBs/Ptri.v.3.db`.
 
-* Software dependencies can be found in the individual scripts in the `code/` folder.
+* Software dependencies (versions used).
+  * bowtie2 (v2.3.5)
+  * cutadapt (v2.7)
+  * pheniqs (v2.0.4)
+  * R (3.6.2)
+  * SeqPurge (v2019_11)
 
+* R packages
+  * betareg (v3.1-3)
+  * Biostrings (v2.54.0)
+  * cowplot (v1.0.0)
+  * dada2 (v1.15)
+  * DECIPHER (v2.14)
+  * doMC (v1.3.6)
+  * emmeans (v1.4.4)
+  * foreach (v1.4.8)
+  * ggbeeswarm (v0.6.0)
+  * ggtext (v0.1.0)
+  * ggthemes (v4.2.0)
+  * ggvegan (v0.1-0)
+  * lmtest (v0.9-37)
+  * magrittr (v1.5)
+  * MASS (v7.3-51.5)
+  * mvabund (v4.0.1), 
+  * phyloseq (v1.30.0)
+  * ShortRead (v1.44.3)
+  * tidyverse (v1.3)
+  * vegan (v2.5-6)
 
+### Descriptions of code
+  * biasEstimates.R
+    * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
+  * colors.R
+    * Define color paletts used in figures.
+  * compile.R
+    * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
+  * demux.config.json
+    * Define instructions for demultiplexing with Pheniqs.
+  * denoise.R
+    * Denoise Illumina data to identify amplicon sequence variants with DADA2.
+  * jsdModels.R
+    * Multvariate test using joint species distribution models with mvabund.
+  * mapFigS1.R 
+    * make map showing geographic origins of *P. trichocarpa* genotypes.
+  * ordinations.R
+    * Visualize community data using distance-based redundancy analysis.
+  * priorityEffects.R
+    * Explore the bennefit of preemptive colonization for the fungal species used as early colonists in the immigration history treatments.
+  * Rfunctions.R
+    * Some custom R functions used by other scripts.
+  * rustAnalysis.R
+    * Test effects of experimental treatments on leaf rust severity and make corresponding figures.
+  * rustCor.R
+    * Explore possible correlations between relative abundance of foliar fungi and rust severity.
+  * trim.sh
+    * Process demultiplexed Illumina data to trim gene primers and read-through contamination.
+  * univariate.R
+    * Make figures showing responses of individual species to experimental treatments.
+    
 
 
 
