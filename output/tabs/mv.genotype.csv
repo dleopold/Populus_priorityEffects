@@ -1,0 +1,5 @@
+"","Res.Df","Df.diff","wald","Pr(>wald)"
+"(Intercept)",246,NA,NA,NA
+"Genotype",235,11,20.1677404568503,2e-04
+"Treatment",231,4,21.769682334182,2e-04
+"Genotype:Treatment",187,44,23.5407452124661,0.0384

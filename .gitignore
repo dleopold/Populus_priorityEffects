@@ -1,5 +1,8 @@
 output/*
 !output/compiled/
+!output/figs/
+!output/tabs/
+!output/rds/
 data/MiSeq_raw
 data/referenceDBs
 .Rproj.user/

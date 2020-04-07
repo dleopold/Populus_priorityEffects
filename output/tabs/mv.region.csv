@@ -1,0 +1,5 @@
+"","Res.Df","Df.diff","wald","Pr(>wald)"
+"(Intercept)",246,NA,NA,NA
+"Region",245,1,12.386230548188,2e-04
+"Treatment",241,4,21.6551128624325,2e-04
+"Region:Treatment",237,4,6.15528877759332,0.3016

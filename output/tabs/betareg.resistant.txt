@@ -1,0 +1,47 @@
+[1] "Resistant genotypes"
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype * Treatment | Genotype
+Model 2: pctLesion ~ Genotype + Treatment | Genotype
+  #Df LogLik  Df  Chisq Pr(>Chisq)
+1  36 415.07                      
+2  16 412.09 -20 5.9477      0.999
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype + Treatment | Genotype
+Model 2: pctLesion ~ Genotype | Genotype
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  16 412.09                     
+2  12 411.22 -4 1.7361     0.7841
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype + Treatment | Genotype
+Model 2: pctLesion ~ Treatment | Genotype
+  #Df LogLik Df  Chisq Pr(>Chisq)    
+1  16 412.09                         
+2  11 395.35 -5 33.481   3.02e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype * Treatment | Genotype
+Model 2: pctRust ~ Genotype + Treatment | Genotype
+  #Df LogLik  Df  Chisq Pr(>Chisq)
+1  36 835.20                      
+2  16 825.59 -20 19.216     0.5078
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype + Treatment | Genotype
+Model 2: pctRust ~ Genotype | Genotype
+  #Df LogLik Df Chisq Pr(>Chisq)
+1  16 825.59                    
+2  12 823.83 -4 3.534     0.4727
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype + Treatment | Genotype
+Model 2: pctRust ~ Treatment | Genotype
+  #Df LogLik Df  Chisq Pr(>Chisq)    
+1  16 825.59                         
+2  11 804.08 -5 43.037  3.632e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

@@ -1,0 +1,51 @@
+[1] "Susceptible genotypes"
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype * Treatment
+Model 2: pctLesion ~ Genotype + Treatment
+  #Df LogLik  Df  Chisq Pr(>Chisq)  
+1  31 174.05                        
+2  11 157.25 -20 33.594    0.02901 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype + Treatment
+Model 2: pctLesion ~ Genotype
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  11 157.25                     
+2   7 154.99 -4 4.5259     0.3395
+Likelihood ratio test
+
+Model 1: pctLesion ~ Genotype + Treatment
+Model 2: pctLesion ~ Treatment
+  #Df LogLik Df  Chisq Pr(>Chisq)    
+1  11 157.25                         
+2   6 127.14 -5 60.231  1.089e-11 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype * Treatment
+Model 2: pctRust ~ Genotype + Treatment
+  #Df LogLik  Df  Chisq Pr(>Chisq)  
+1  31 366.56                        
+2  11 349.95 -20 33.226    0.03186 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype + Treatment
+Model 2: pctRust ~ Genotype
+  #Df LogLik Df  Chisq Pr(>Chisq)
+1  11 349.95                     
+2   7 346.12 -4 7.6547     0.1051
+Likelihood ratio test
+
+Model 1: pctRust ~ Genotype + Treatment
+Model 2: pctRust ~ Treatment
+  #Df LogLik Df  Chisq Pr(>Chisq)    
+1  11 349.95                         
+2   6 312.53 -5 74.828   1.01e-14 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
