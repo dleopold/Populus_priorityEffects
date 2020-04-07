@@ -65,12 +65,13 @@ rds := output/rds/
 analysis: analysisOut \
 	${tb}bias.csv ${fg}Fig.S2.pdf ${fg}Fig.S3.pdf \
 	${tb}mv.genotype.csv ${tb}mv.region.csv ${rds}mv.genotype.rds ${rds}mv.region.rds \
-	${fg}Fig.2.pdf ${fg}Fig.S5.pdf \
-	${fg}Fig.1.pdf ${fg}Fig.S6.pdf \
+	${fg}Fig.1.pdf \
+	${fg}Fig.2.pdf \
 	${fg}Fig.3.pdf \
 	${fg}Fig.S4.pdf ${tb}susceptibility.csv \
-	${fg}Fig.4.pdf ${fg}Fig.S7.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt \
-	${fg}Fig.S8.pdf
+	${fg}Fig.3.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt \
+	${fg}Fig.S5.pdf \
+	${fg}Fig.S1.pdf
 	
 analysisOut:
 	mkdir -p output/figs
@@ -85,22 +86,23 @@ ${tb}bias.csv ${fg}Fig.S2.pdf ${fg}Fig.S3.pdf: code/biasEstimates.R output/compi
 # Joint-species distribution models
 ${tb}mv.genotype.csv ${tb}mv.region.csv ${rds}mv.genotype.rds ${rds}mv.region.rds: code/jsdModels.R ${tb}bias.csv | analysisOut
 	Rscript $<
-# Univariate response figures
-${fg}Fig.2.pdf ${fg}Fig.S5.pdf: code/univariate.R ${rds}mv.genotype.rds ${rds}mv.region.rds | analysisOut
-	Rscript $<
-# Ordinations
-${fg}Fig.1.pdf ${fg}Fig.S6.pdf: code/ordinations.R ${tb}bias.csv | analysisOut
+# Multipanel figure showing variation in community composition
+${fg}Fig.1.pdf: code/communityFigure.R ${rds}mv.genotype.rds ${rds}mv.region.rds | analysisOut
 	Rscript $<
 # Single-species priority effects
-${fg}Fig.3.pdf: code/priorityEffects.R ${tb}bias.csv | analysisOut
+${fg}Fig.2.pdf: code/priorityEffects.R ${tb}bias.csv | analysisOut
 	Rscript $<
 
 ### Rust analyses ###
 ${fg}Fig.S4.pdf ${tb}susceptibility.csv: code/rustSusceptibility.R | analysisOut
 	Rscript $<
-${fg}Fig.4.pdf ${fg}Fig.S7.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt: code/rustAnalyses.R | analysisOut
+${fg}Fig.3.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt: code/rustAnalyses.R code/rustSusceptibility.R | analysisOut
 	Rscript $<
-${fg}Fig.S8.pdf: code/rustCor.R | analysisOut
+${fg}Fig.S5.pdf: code/rustCor.R | analysisOut
 	Rscript $<
 	
+### Make map of geontype origins for supplement
+${fg}Fig.S1.pdf: code/mapFigS1.R | analysisOut
+	Rscript $<
+
 

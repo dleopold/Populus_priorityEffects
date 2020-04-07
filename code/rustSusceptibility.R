@@ -72,6 +72,7 @@ ggplot(rust.negs.means,aes(x=pctLesion,y=pctRust,fill=Region,shape=Cluster))+
   theme(legend.position = c(0.05,0.98),
         legend.justification = c(0, 1))
 ggsave("output/figs/Fig.S4.pdf",width=6,height=4)
+ggsave("MS/figs/Fig.S4.jpg",width=6,height=4)
 
 # Save susceptibility data
 write.csv(rust.negs.means,"output/tabs/susceptibility.csv")

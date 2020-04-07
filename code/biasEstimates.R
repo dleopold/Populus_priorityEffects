@@ -80,6 +80,7 @@ dat %>%
         strip.text = element_text(size=16),
         legend.title = element_blank())
 ggsave("output/figs/Fig.S2.pdf",width=7,height=6)
+ggsave("MS/figs/Fig.S2.jpg",width=7,height=6)
 
 # Figure of bias estimates
 bias0 %>%
@@ -95,4 +96,4 @@ bias0 %>%
   theme(axis.text.y = element_text(size=12,face="italic"),
         axis.title = element_text(size=12))
 ggsave("output/figs/Fig.S3.pdf",width=7,height=5)
-
+ggsave("MS/figs/Fig.S3.jpg",width=7,height=5)

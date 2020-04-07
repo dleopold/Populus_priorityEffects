@@ -62,11 +62,11 @@ dat <- full_join(resid,otuTab) %>%
 ### Correlation tests ###
 #########################
 
-pearsons <- foreach(i=unique(dat$variable), .combine=bind_rows) %do% {
+correlation <- foreach(i=unique(dat$variable), .combine=bind_rows) %do% {
   foo <- dat %>% filter(variable==i)
-  p <- cor.test(foo$resid,foo$value)$p.value %>% round(2)
+  p <- cor.test(foo$resid,foo$value, method="kendall")$p.value %>% round(2)
   names(p) <- "pval"
-  r <- cor.test(foo$resid,foo$value)$estimate %>% round(2)
+  r <- cor.test(foo$resid,foo$value, method="kendall")$estimate %>% round(2)
   c(p,r)
 } %>% mutate(variable=unique(dat$variable))
 
@@ -81,8 +81,8 @@ dat$variable_lab <- ifelse(dat$variable %in% taxa_names(phy),
 dat$variable_lab %<>% factor(.,levels=unique(.)[c(grep("*",.,fixed=T,invert = T),grep("*",.,fixed=T))])
 # Merge correlation test results and format for markdown
 cor.dat <- dat %>% select(variable,variable_lab) %>% unique() %>%
-  left_join(pearsons) %>%
-  mutate(stats=paste0("*p*=",pval,"; ","*r*=",cor))
+  left_join(correlation) %>%
+  mutate(stats=paste0("*p*=",pval,"; ","τ=",tau))
 #make figure
 ggplot(dat, aes(x=value,y=resid))+
   geom_point()+
@@ -98,4 +98,5 @@ ggplot(dat, aes(x=value,y=resid))+
   theme(strip.background = element_blank(), 
         strip.text = element_markdown(size=12),
         axis.line = element_blank())
-ggsave("output/figs/Fig.S8.pdf",width=7,height=8)
+ggsave("output/figs/Fig.S5.pdf",width=7,height=8)
+ggsave("MS/figs/Fig.S5.jpg",width=7,height=8)

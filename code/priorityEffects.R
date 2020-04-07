@@ -27,7 +27,7 @@ df <- phy %>% unbias(.,bias) %>%
   dplyr::select(all_of(focalTaxa)) %>%
   bind_cols(sample_data(phy) %>% data.frame %>% 
               dplyr::select(Region,Genotype,Treatment)) %>%
-  pivot_longer(focalTaxa,names_to="Taxa",values_to="proportion") %>%
+  pivot_longer(all_of(focalTaxa),names_to="Taxa",values_to="proportion") %>%
   mutate(Focal=ifelse(Taxa==Treatment,T,F),
          Region=ifelse(Region=="East","E","W") %>%
            factor(levels=c("W","E")))
@@ -98,7 +98,7 @@ get_inset <- function(df,inset.ymin,inset.ymax){
   ggplot(df, 
          aes(x=Region,y=mu.boot)) +
     geom_violin(scale="width",fill="grey75",color="grey75") + 
-    geom_text(data=df %>% select(Region,Taxa,stars,mu.boot.max) %>%
+    geom_text(data=df %>% dplyr::select(Region,Taxa,stars,mu.boot.max) %>%
                 slice(1),
               aes(label=stars,y=mu.boot.max),size=5)+
     geom_hline(yintercept = 0,alpha=0.4,linetype="dotted")+
@@ -113,7 +113,7 @@ get_inset <- function(df,inset.ymin,inset.ymax){
 
 # create inset plots as a list
 insets <- bootRegion %>% 
-  left_join(select(regionSig,Region,Taxa,stars,mu.boot.max)) %>%
+  left_join(dplyr::select(regionSig,Region,Taxa,stars,mu.boot.max)) %>%
   split(f = .$Taxa) %>%
   purrr::map(~annotation_custom2(
     grob = ggplotGrob(get_inset(.,min(bootRegion$mu.boot),max(bootRegion$mu.boot))), 
@@ -128,10 +128,6 @@ ggplot(bootPE.ci,aes(x=Genotype,y=PE))+
   scale_shape_manual("Host genotype", values=c(rep(21,7),rep(23,5)))+
   scale_fill_manual("Host genotype",values=pal.genotype)+
   geom_hline(yintercept = 0,alpha=0.6,linetype="dotted")+
-  geom_text(aes(y=Inf, label=lab), hjust=0.2, vjust=1.6,
-            data=data.frame(Genotype=1,
-                            Taxa=unique(bootPE.ci$Taxa),
-                            lab=paste0("(",letters[1:5],")")))+
   scale_x_discrete(breaks = levels(bootPEs$Genotype),
                    limits = c(levels(bootPEs$Genotype)[1:7], "skip1",
                               levels(bootPEs$Genotype)[8:12]),
@@ -154,4 +150,6 @@ ggplot(bootPE.ci,aes(x=Genotype,y=PE))+
         plot.tag = element_text(angle=90,hjust=0),
         plot.tag.position = c(0.848,0.115))+
   insets
-ggsave("output/figs/Fig.3.pdf",width=24,height=10,units="cm")
+ggsave("output/figs/Fig.2.pdf",width=24,height=10,units="cm")
+ggsave("MS/figs/Fig.2.jpg",width=24,height=10,units="cm")
+

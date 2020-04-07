@@ -39,7 +39,7 @@ unbias <- function(phy.in,bias){
   #Impute values to replace zeros using a method that retains the correlations structure of the compositional community data
   #this is necessary so that the bias correction can account for variation in the probability of zero counts being real due to 
   #unequal sequencing depth
-  if(sum(otuTab==0)>0){otuTab %>% zCompositions::cmultRepl(method="GBM",output="p-counts",suppress.print = T)}
+  if(sum(otuTab==0)>0){otuTab %<>% zCompositions::cmultRepl(method="GBM",output="p-counts",suppress.print = T)}
   #Construct bias correction vector 
   bias.adjust <- rep(1,ntaxa(phy.in)) 
   for(i in 1:ntaxa(phy.in)){
@@ -59,8 +59,9 @@ unbias <- function(phy.in,bias){
 ### logit transform data in phyloseq object ###
 phy_logit <- function(phy.in){
   #Impute values for zeros
-  otu_table(phy.in) %<>% data.frame %>% zCompositions::cmultRepl(method="GBM",output="p-counts",suppress.print = T) %>%
-    otu_table(taxa_are_rows = F)
+  otuTab <- otu_table(phy.in) %>% data.frame
+  if(sum(otuTab==0)>0){otuTab %<>% zCompositions::cmultRepl(method="GBM",output="p-counts",suppress.print = T)
+    otu_table(phy) <- otu_table(otu_tab, taxa_are_rows = F)}
   # apply logit transformation
   phy.in %<>% transform_sample_counts(function(x){log(x/sum(x) - log(1-(x/sum(x))))})
   #return updated phylseq object
@@ -78,8 +79,28 @@ annotation_custom2 <- function (grob, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax
                                        ymin = ymin, ymax = ymax))
 }
 
+#______________________________#
+### mutate over ragged array ###
+mutate_by <- function(.data, group_vars, ...) {
+  gvs <- rlang::enquos(group_vars)
+  .data %>%
+    group_by_at(vars(!!!gvs)) %>%
+    mutate(...) %>%
+    ungroup
+}
+
 #_____________________________#
 ### calculate geometric mean ###
 gm_mean <- function(x, na_rm = FALSE) {
   exp(mean(log(x), na.rm = na_rm))
 }
+
+#__________________________________________________#
+### rescaling assymetric diverging color palette ###
+mid_rescaler <- function(mid = 0) {
+  function(x, to = c(0, 1), from = range(x, na.rm = TRUE)) {
+    scales::rescale_mid(x, to, from, mid)
+  }
+}
+
+
