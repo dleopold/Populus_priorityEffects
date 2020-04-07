@@ -43,13 +43,17 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
   * foreach (v1.4.8)
   * ggbeeswarm (v0.6.0)
   * ggtext (v0.1.0)
+  * ggnewscale (v0.4.1)
   * ggthemes (v4.2.0)
   * ggvegan (v0.1-0)
   * lmtest (v0.9-37)
   * magrittr (v1.5)
   * MASS (v7.3-51.5)
-  * mvabund (v4.0.1), 
+  * mvabund (v4.0.1)
+  * patchwork (v1.0.0)
+  * philentropy (v0.4.0)
   * phyloseq (v1.30.0)
+  * scico (v1.1.0)
   * ShortRead (v1.44.3)
   * tidyverse (v1.3)
   * vegan (v2.5-6)
@@ -59,6 +63,8 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
     * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
   * colors.R
     * Define color paletts used in figures.
+  * comunityFigure.R
+    * Make multipanel figure of variation in community composition.
   * compile.R
     * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
   * demux.config.json
@@ -69,20 +75,19 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
     * Multvariate test using joint species distribution models with mvabund.
   * mapFigS1.R 
     * make map showing geographic origins of *P. trichocarpa* genotypes.
-  * ordinations.R
-    * Visualize community data using distance-based redundancy analysis.
   * priorityEffects.R
     * Explore the bennefit of preemptive colonization for the fungal species used as early colonists in the immigration history treatments.
   * Rfunctions.R
     * Some custom R functions used by other scripts.
-  * rustAnalysis.R
+  * rustAnalyses.R
     * Test effects of experimental treatments on leaf rust severity and make corresponding figures.
   * rustCor.R
     * Explore possible correlations between relative abundance of foliar fungi and rust severity.
+  * rustSusceptibility.R
+    * Look at baseline rust susceptibiliy in uninoculated plants.
   * trim.sh
     * Process demultiplexed Illumina data to trim gene primers and read-through contamination.
-  * univariate.R
-    * Make figures showing responses of individual species to experimental treatments.
+
     
 
 
