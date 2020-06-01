@@ -1,5 +1,5 @@
 # Effects of genotype x arrival order interactions on rust severity
-# Analyses conducte seperately for resistent and susceptible genotypes (likely representing varaition in major gene resistance)
+# Analyses conducted separately for resistant and susceptible genotypes (likely representing variation in major gene resistance)
 
 library(tidyverse)
 library(magrittr)
@@ -9,6 +9,7 @@ library(lmtest)
 library(ggthemes)
 library(patchwork)
 library(ggtext)
+library(gt)
 
 source("code/Rfunctions.R")
 source("code/colors.R")
@@ -34,76 +35,92 @@ rust.r <-  rust %>%
 ### Betaregression models ###
 #############################
 
+### Lesions ###
+
 # Susceptible genotypes
-sink("output/tabs/betareg.susceptible.txt"); print("Susceptible genotypes")
 lesion.s <- betareg(pctLesion ~ Genotype*Treatment, weights=weights, data=rust.s)
 lesion.s.noInt <- betareg(pctLesion ~ Genotype+Treatment, weights=weights, data=rust.s)
-lrtest(lesion.s, lesion.s.noInt) #test interation
-lrtest(lesion.s.noInt, .~. -Treatment) #test treatment 
-lrtest(lesion.s.noInt, .~. -Genotype) #test genotype
-
-uridinia.s <- betareg(pctRust ~ Genotype*Treatment, weights=weights, data=rust.s)
-uridinia.s.noInt <- betareg(pctRust ~ Genotype+Treatment, weights=weights, data=rust.s)
-lrtest(uridinia.s, uridinia.s.noInt) #test interation
-lrtest(uridinia.s.noInt, .~. -Treatment) #test treatment 
-lrtest(uridinia.s.noInt, .~. -Genotype) #test genotype
-sink()
+susceptible.interaction <- lrtest(lesion.s, lesion.s.noInt) #test interation
+susceptible.treatment <- lrtest(lesion.s.noInt, .~. -Treatment) #test treatment 
+susceptible.genotype <- lrtest(lesion.s.noInt, .~. -Genotype) #test genotype
 
 # Resistant genotypes - precision parameter modeled as function of genotype to account for heteroskedasticity
-sink("output/tabs/betareg.resistant.txt"); print("Resistant genotypes")
 lesion.r <- betareg(pctLesion ~ Genotype*Treatment|Genotype, weights=weights, data=rust.r)
 lesion.r.noInt <- betareg(pctLesion ~ Genotype+Treatment|Genotype, weights=weights, data=rust.r)
-lrtest(lesion.r, lesion.r.noInt) #test interation
-lrtest(lesion.r.noInt, .~. -Treatment) #test treatment 
-lrtest(lesion.r.noInt, .~. -Genotype) #test genotype
+resistant.interaction <- lrtest(lesion.r, lesion.r.noInt) #test interation
+resistant.treatment<- lrtest(lesion.r.noInt, .~. -Treatment) #test treatment 
+resistant.genotype <- lrtest(lesion.r.noInt, .~. -Genotype) #test genotype
 
-uridinia.r <- betareg(pctRust ~ Genotype*Treatment|Genotype, weights=weights, data=rust.r)
-uridinia.r.noInt <- betareg(pctRust ~ Genotype+Treatment|Genotype, weights=weights, data=rust.r)
-lrtest(uridinia.r, uridinia.r.noInt) #test interation
-lrtest(uridinia.r.noInt, .~. -Treatment) #test treatment 
-lrtest(uridinia.r.noInt, .~. -Genotype) #test genotype
-sink()
+results.susceptible <- data.frame(group="Susceptible",
+                          Predictor=c("Genotype","Treatment","Genotype:Treatment"),
+                          'ΔDf'=abs(c(susceptible.genotype$Df[2],
+                                      susceptible.treatment$Df[2],
+                                      susceptible.interaction$Df[2])),
+                          LR=round(c(susceptible.genotype$Chisq[2],
+                               susceptible.treatment$Chisq[2],
+                               susceptible.interaction$Chisq[2]),1),
+                          P=round(c(susceptible.genotype$`Pr(>Chisq)`[2],
+                                     susceptible.treatment$`Pr(>Chisq)`[2],
+                                     susceptible.interaction$`Pr(>Chisq)`[2]),3))
+results.resistant <- data.frame(group="Resistant",
+                          Predictor=c("Genotype","Treatment","Genotype:Treatment"),
+                          'ΔDf'=abs(c(resistant.genotype$Df[2],
+                                      resistant.treatment$Df[2],
+                                      resistant.interaction$Df[2])),
+                          LR=round(c(resistant.genotype$Chisq[2],
+                                     resistant.treatment$Chisq[2],
+                                     resistant.interaction$Chisq[2]),1),
+                          P=round(c(resistant.genotype$`Pr(>Chisq)`[2],
+                                    resistant.treatment$`Pr(>Chisq)`[2],
+                                    resistant.interaction$`Pr(>Chisq)`[2]),3))
+# Summarize results
+bind_cols(results.susceptible,results.resistant) %>% 
+  select(-group,-group1, -Predictor1) %>%
+  gt(rowname_col = "Predictor") %>%
+  tab_spanner(
+    label = "Susceptible",
+    columns = vars(ΔDf, LR, P)
+  ) %>%
+  tab_spanner(
+    label = "Resistant",
+    columns = vars(ΔDf1, LR1, P1)
+  ) %>%
+  cols_label(ΔDf1='ΔDf',
+              P=md("*P*-value"),
+              P1=md("*P*-value"),
+              LR=md("LRT-χ<sup>2<sup>"),
+              LR1=md("LRT-χ<sup>2<sup>")) %>%
+  fmt(
+    columns = vars(P),
+    fns = function(x) {
+      ifelse(x>=0.001,
+             as.character(x),
+             "< 0.001")
+    }
+  ) %>%
+  cols_align("center") %>%
+  gtsave("output/figs/betaReg.lesion.png")
+    
+
+### Uridinia ###
+
+# Susceptible genotypes
+#uridinia.s <- betareg(pctRust ~ Genotype*Treatment, weights=weights, data=rust.s)
+#uridinia.s.noInt <- betareg(pctRust ~ Genotype+Treatment, weights=weights, data=rust.s)
+#lrtest(uridinia.s, uridinia.s.noInt) #test interation
+#lrtest(uridinia.s.noInt, .~. -Treatment) #test treatment 
+#lrtest(uridinia.s.noInt, .~. -Genotype) #test genotype
+
+# Resistant genotypes 
+#uridinia.r <- betareg(pctRust ~ Genotype*Treatment|Genotype, weights=weights, data=rust.r)
+#uridinia.r.noInt <- betareg(pctRust ~ Genotype+Treatment|Genotype, weights=weights, data=rust.r)
+#lrtest(uridinia.r, uridinia.r.noInt) #test interation
+#lrtest(uridinia.r.noInt, .~. -Treatment) #test treatment 
+#lrtest(uridinia.r.noInt, .~. -Genotype) #test genotype
 
 ####################
 ### Make figures ###
 ####################
-
-dat.fig <- emmeans(lesion.s, ~Treatment|Genotype) %>% data.frame %>%
-  mutate(group="Susceptible",
-         Genotype=factor(Genotype,levels=levels(susceptible$Genotype)),
-         upper.CL=asymp.UCL,
-         lower.CL=asymp.LCL) %>%
-  bind_rows(
-    emmeans(lesion.r, ~Treatment|Genotype) %>% data.frame %>%
-      mutate(group="Resistant",
-             Genotype=factor(Genotype,levels=levels(susceptible$Genotype)),
-             upper.CL=asymp.UCL,
-             lower.CL=asymp.LCL)
-  )
-
-ggplot(dat.fig,aes(x=Treatment,y=emmean,fill=Treatment)) +
-  geom_hline(data=filter(susceptible,Cluster=="susceptible"),
-             aes(yintercept=pctLesion),linetype="dotted")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=0)+
-  geom_point(shape=21,size=4)+
-  geom_point(data=rust.s,
-             aes(y=pctLesion,alpha=nleaf),shape=21,size=2,
-             show.legend = F)+
-  scale_alpha(range=c(0.4,1))+
-  labs(y="Disease severity (% rust lesion)")+
-  scale_fill_manual(values=pal.treatment)+
-  scale_y_continuous(labels = function(x) x*100)+
-  facet_wrap(~group+Genotype,nrow=2)+
-  theme_few()+
-  theme(strip.background = element_blank(), 
-        axis.text.x = element_blank(),
-        strip.text = element_text(size=11),
-        axis.ticks.x = element_blank(),
-        axis.title.x = element_blank(),
-        legend.text = element_text(face="italic"))
-
-
-
 
 # Susceptible genotypes
 (fig.a <- emmeans(lesion.s, ~Treatment|Genotype) %>% data.frame %>%
@@ -114,23 +131,25 @@ ggplot(dat.fig,aes(x=Treatment,y=emmean,fill=Treatment)) +
     geom_hline(data=filter(susceptible,Cluster=="susceptible"),
                aes(yintercept=pctLesion),linetype="dotted")+
     geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=0)+
-    geom_point(shape=21,size=3)+
+    geom_point(shape=21,size=2)+
     geom_point(data=rust.s,
-               aes(y=pctLesion,alpha=nleaf),shape=21,size=1.5,
+               aes(y=pctLesion,alpha=nleaf),shape=21,size=1,
                show.legend = F)+
     scale_alpha(range=c(0.4,1))+
-    labs(y="Susceptible genotypes<br>leaf rust (% lesion)")+
+    labs(y="Rust lesion (%)")+
     scale_fill_manual("Initial colonist:",values=pal.treatment)+
     scale_y_continuous(labels = function(x) x*100)+
+   #coord_equal(20)+
+   ggtitle("Rust susceptible genotypes")+
     facet_wrap(~Genotype,nrow=1)+
     theme_few()+
     theme(strip.background = element_blank(), 
           axis.text.x = element_blank(),
-          strip.text = element_text(size=11),
+          strip.text = element_text(size=9),
           axis.ticks.x = element_blank(),
           axis.title.x = element_blank(),
-          axis.title.y = element_markdown(),
-          legend.text = element_text(size=12,face="italic")))
+          axis.title.y = element_markdown(size=9),
+          legend.text = element_text(size=9,face="italic")))
 
 # Resistant genotypes
 (fig.b <- emmeans(lesion.r.noInt, ~Treatment|Genotype) %>% data.frame %>%
@@ -141,29 +160,35 @@ ggplot(dat.fig,aes(x=Treatment,y=emmean,fill=Treatment)) +
   geom_hline(data=filter(susceptible,Cluster=="resistant"),
              aes(yintercept=pctLesion),linetype="dotted")+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=0)+
-  geom_point(shape=21,size=3)+
+  geom_point(shape=21,size=2)+
   geom_point(data=rust.r,
-             aes(y=pctLesion,alpha=nleaf),shape=21,size=1.5,
+             aes(y=pctLesion,alpha=nleaf),shape=21,size=1,
              show.legend = F)+
   scale_alpha(range=c(0.4,1))+
-  labs(y="Resistant genotypes<br>leaf rust (% lesion)")+
-  scale_y_continuous(limits=c(0,0.4),labels = function(x) x*100)+
+  labs(y="Rust lesion (%)")+
+  scale_y_continuous(limits=c(0,0.14),
+                     breaks=c(0,0.1),
+                     labels = function(x) x*100)+
   scale_fill_manual("Initial colonist:",values=pal.treatment)+
+    ggtitle("Rust resistant genotypes")+
   facet_wrap(~Genotype,nrow=1)+
   theme_few()+
   theme(strip.background = element_blank(),
-        strip.text = element_text(size=11),
+        strip.text = element_text(size=9),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_markdown(size=12),
-        legend.text = element_text(size=12,face="italic")))
+        axis.title.y = element_markdown(size=9),
+        legend.text = element_text(size=9,face="italic")))
 
 # Combine into multipanel figure
-fig.a + fig.b +
-  plot_layout(ncol=1,guides = 'collect') +
-  plot_annotation(tag_levels = 'a',tag_prefix = "(",tag_suffix = ")") &
-  theme(plot.tag = element_text(size=12,face="bold"),
-        legend.position = 'bottom')
-ggsave("output/figs/Fig.3.pdf",width=25,height=18,units="cm")
-ggsave("MS/figs/Fig.3.jpg",width=25,height=18,units="cm") 
+fig.a / fig.b +
+  plot_layout(guides = 'collect',heights = c(4,1.35)) +
+  plot_annotation(tag_levels = 'A') &
+  theme(plot.tag = element_text(size=10,face="bold"),
+        legend.position = 'bottom', legend.title = element_text(size=9),
+        plot.title = element_text(size=10,hjust=0.5))
+ggsave("output/figs/Fig.4.pdf",width=174,height=110,units="mm")
+
+
+

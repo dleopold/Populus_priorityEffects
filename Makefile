@@ -63,15 +63,14 @@ fg := output/figs/
 rds := output/rds/
 
 analysis: analysisOut \
-	${tb}bias.csv ${fg}Fig.S2.pdf ${fg}Fig.S3.pdf \
-	${tb}mv.genotype.csv ${tb}mv.region.csv ${rds}mv.genotype.rds ${rds}mv.region.rds \
-	${fg}Fig.1.pdf \
+	${tb}bias.csv ${fg}Fig.S2.jpg \
+	${rds}mv.genotype.rds ${rds}mv.region.rds \
 	${fg}Fig.2.pdf \
 	${fg}Fig.3.pdf \
-	${fg}Fig.S4.pdf ${tb}susceptibility.csv \
-	${fg}Fig.3.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt \
-	${fg}Fig.S5.pdf \
-	${fg}Fig.S1.pdf
+	${fg}Fig.4.pdf \
+	${fg}Fig.S3.jpg ${tb}susceptibility.csv \
+	${fg}Fig.S4.jpg \
+	${fg}Fig.S1.jpg
 	
 analysisOut:
 	mkdir -p output/figs
@@ -79,30 +78,30 @@ analysisOut:
 	mkdir -p output/rds
 
 # Estimate sequencing bias from mock community data
-${tb}bias.csv ${fg}Fig.S2.pdf ${fg}Fig.S3.pdf: code/biasEstimates.R output/compiled/ | analysisOut
+${tb}bias.csv ${fg}Fig.S2.jpg: code/biasEstimates.R output/compiled/ | analysisOut
 	Rscript $<
 
 ### Community analyses ###
 # Joint-species distribution models
-${tb}mv.genotype.csv ${tb}mv.region.csv ${rds}mv.genotype.rds ${rds}mv.region.rds: code/jsdModels.R ${tb}bias.csv | analysisOut
+${rds}mv.genotype.rds ${rds}mv.region.rds: code/jsdModels.R ${tb}bias.csv | analysisOut
 	Rscript $<
 # Multipanel figure showing variation in community composition
-${fg}Fig.1.pdf: code/communityFigure.R ${rds}mv.genotype.rds ${rds}mv.region.rds | analysisOut
+${fg}Fig.2.pdf: code/communityFigure.R ${rds}mv.genotype.rds ${rds}mv.region.rds | analysisOut
 	Rscript $<
 # Single-species priority effects
-${fg}Fig.2.pdf: code/priorityEffects.R ${tb}bias.csv | analysisOut
+${fg}Fig.3.pdf: code/priorityEffects.R ${tb}bias.csv | analysisOut
 	Rscript $<
 
 ### Rust analyses ###
-${fg}Fig.S4.pdf ${tb}susceptibility.csv: code/rustSusceptibility.R | analysisOut
+${fg}Fig.S3.jpg ${tb}susceptibility.csv: code/rustSusceptibility.R | analysisOut
 	Rscript $<
-${fg}Fig.3.pdf ${tb}betareg.susceptible.txt ${tb}betareg.resistant.txt: code/rustAnalyses.R code/rustSusceptibility.R | analysisOut
+${fg}Fig.4.pdf: code/rustAnalyses.R code/rustSusceptibility.R | analysisOut
 	Rscript $<
-${fg}Fig.S5.pdf: code/rustCor.R | analysisOut
+${fg}Fig.S4.jpg: code/rustCor.R | analysisOut
 	Rscript $<
 	
 ### Make map of geontype origins for supplement
-${fg}Fig.S1.pdf: code/mapFigS1.R | analysisOut
+${fg}Fig.S1.jpg: code/mapFigS1.R | analysisOut
 	Rscript $<
 
 

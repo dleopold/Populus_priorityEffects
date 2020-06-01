@@ -150,6 +150,5 @@ ggplot(bootPE.ci,aes(x=Genotype,y=PE))+
         plot.tag = element_text(angle=90,hjust=0),
         plot.tag.position = c(0.848,0.115))+
   insets
-ggsave("output/figs/Fig.2.pdf",width=24,height=10,units="cm")
-ggsave("MS/figs/Fig.2.jpg",width=24,height=10,units="cm")
+ggsave("output/figs/Fig.3.pdf",width=24,height=10,units="cm")
 

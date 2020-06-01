@@ -62,8 +62,8 @@ ggplot(rust.negs.means,aes(x=pctLesion,y=pctRust,fill=Region,shape=Cluster))+
   geom_errorbar(aes(ymin=pctRust-pctRust.se,ymax=pctRust+pctRust.se),width=0)+
   geom_errorbarh(aes(xmin=pctLesion-pctLesion.se,xmax=pctLesion+pctLesion.se),height=0)+
   geom_point(size=4)+
-  scale_shape_manual(values = c(21,23),name="K-means\ncluster")+
-  scale_fill_manual(values = pal.region)+
+  scale_shape_manual(values = c(21,23),name="K-means\nclustering")+
+  scale_fill_manual("Ecotype",values = pal.region)+
   scale_x_log10()+
   scale_y_log10()+
   labs(x="Proportion chlorotic lesion", y="Proportion uredinia")+
@@ -71,8 +71,7 @@ ggplot(rust.negs.means,aes(x=pctLesion,y=pctRust,fill=Region,shape=Cluster))+
   theme_few()+
   theme(legend.position = c(0.05,0.98),
         legend.justification = c(0, 1))
-ggsave("output/figs/Fig.S4.pdf",width=6,height=4)
-ggsave("MS/figs/Fig.S4.jpg",width=6,height=4)
+ggsave("output/figs/Fig.S3.jpg",width=6,height=4)
 
 # Save susceptibility data
 write.csv(rust.negs.means,"output/tabs/susceptibility.csv")

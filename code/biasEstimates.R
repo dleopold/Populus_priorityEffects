@@ -7,6 +7,7 @@ library(phyloseq)
 library(ggthemes)
 library(ggbeeswarm)
 library(metacal)
+library(patchwork)
 
 # Read in phyloseq object and subset experimental samples
 # Removing singletons and doubletons leaves only the expected species
@@ -55,45 +56,51 @@ bootreps.summary <- bootreps %>%
 # Write bias estimates to csv file
 write.csv(bias0,"output/tabs/bias.csv",row.names = F)
 
+# Figure of bias estimates
+fig.a <- bias0 %>%
+  dplyr::rename(Error=Bhat) %>%
+  mutate(Taxon=factor(Taxon,levels=bias0$Taxon[order(bias0$Bhat)])) %>%
+  ggplot(aes(x=Taxon,y=Error,fill=Taxon))+
+  geom_hline(yintercept = 1, color = "grey") +
+  geom_pointrange(aes(ymin = Error / Gm_se^2, ymax = Error * Gm_se^2),
+                  shape=21) +
+  geom_point(shape=21,size=2.5)+
+  scale_fill_tableau("Color Blind")+
+  scale_y_log10() +
+  labs(x="",y="Bias estimate") +
+  coord_flip() +
+  theme_bw() +
+  theme(legend.position = "none",
+        axis.text.y = element_text(size=12,face="italic"),
+        axis.title = element_text(size=12))
+
 # Figure showing effect of bias correction
-dat %>% 
+fig.b <- dat %>% 
   left_join(bias0)  %>%
   mutate_by("Sample", Corrected=logit(close_elts(Observed/Bhat)),
             Actual=logit(close_elts(Actual)),
             Observed=logit(close_elts(Observed))) %>%
   gather("Results","Value",c(3,9)) %>%
-  mutate(Results=factor(Results,levels=c("Observed","Corrected"))) %>%
+  mutate(Results=ifelse(Results=="Observed",
+                        "Raw data",
+                        "Bias-corrected data") %>%
+           factor(.,levels=c("Raw data","Bias-corrected data"))) %>%
   ggplot(aes(x=Actual,y=Value,fill=Taxon)) +
-  geom_quasirandom(width=0.2,shape=21,size=3.5)+
+  geom_quasirandom(width=0.2,shape=21,size=2.5)+
   scale_fill_tableau("Color Blind")+
-  geom_text(data=data.frame(Value=Inf,Actual=-Inf,
-                            lab=c("(a)","(b)"),
-                            Results=c("Observed","Corrected"),
-                            Taxon=NA),
-            aes(label=lab),hjust=-0.3,vjust=1.5)+
-  labs(x="logit( actual proportions )",
-       y="logit( observed proportions )")+
+  labs(x="logit (known proportions)",
+       y="logit (observed proportions)")+
   facet_wrap(Results~.,ncol=1)+
   theme_few()+
-  theme(legend.text = element_text(size=14,face="italic"),
-        axis.title = element_text(size=14),
-        strip.text = element_text(size=16),
-        legend.title = element_blank())
-ggsave("output/figs/Fig.S2.pdf",width=7,height=6)
-ggsave("MS/figs/Fig.S2.jpg",width=7,height=6)
+  theme(legend.position = "none",
+        axis.title = element_text(size=10),
+        strip.text = element_text(size=12,hjus=0))
 
-# Figure of bias estimates
-bias0 %>%
-  dplyr::rename(Error=Bhat) %>%
-  mutate(Taxon=factor(Taxon,levels=bias0$Taxon[order(bias0$Bhat)])) %>%
-  ggplot(aes(x=Taxon,y=Error))+
-  geom_hline(yintercept = 1, color = "grey") +
-  geom_pointrange(aes(ymin = Error / Gm_se^2, ymax = Error * Gm_se^2),shape=21,fill="white") +
-  scale_y_log10() +
-  labs(x="",y="Bias estimate") +
-  coord_flip() +
-  theme_bw() +
-  theme(axis.text.y = element_text(size=12,face="italic"),
-        axis.title = element_text(size=12))
-ggsave("output/figs/Fig.S3.pdf",width=7,height=5)
-ggsave("MS/figs/Fig.S3.jpg",width=7,height=5)
+fig.a + fig.b +
+  plot_layout(ncol=2,widths=c(1,1.2)) +
+  plot_annotation(tag_levels = 'A') &
+  theme(plot.tag = element_text(size=14,face="bold"))
+ggsave("output/figs/Fig.S2.jpg",width=20,height=10,units="cm")
+
+
+

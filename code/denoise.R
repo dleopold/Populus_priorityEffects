@@ -1,4 +1,4 @@
-#denoise samples using dada2 
+#denoise MiSeq data using dada2 
 
 #load packages
 library(tidyverse)

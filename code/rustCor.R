@@ -1,4 +1,4 @@
-# Explore posibility of correlations between rust severity and composition of foliar microbiome
+# Explore possibility of correlations between rust severity and composition of foliar microbiome
 
 library(tidyverse)
 library(magrittr)
@@ -98,5 +98,4 @@ ggplot(dat, aes(x=value,y=resid))+
   theme(strip.background = element_blank(), 
         strip.text = element_markdown(size=12),
         axis.line = element_blank())
-ggsave("output/figs/Fig.S5.pdf",width=7,height=8)
-ggsave("MS/figs/Fig.S5.jpg",width=7,height=8)
+ggsave("output/figs/Fig.S4.jpg",width=7,height=8)

@@ -39,6 +39,83 @@ df.tidy <- phy %>% unbias(.,bias) %>%
            factor(levels=c("W","E")),
          Focal=ifelse(Taxa==Treatment,T,F)) 
 
+#################################################
+### Fig 1c - dbRDA of initial colonist effect ###
+#################################################
+
+# Summarize and spread to wide format
+df.1c <- df.tidy %>% 
+  group_by(Region,Genotype,Treatment,Taxa) %>%
+  summarize(abundance=median(abundance)) %>%
+  ungroup %>%
+  pivot_wider(names_from = Taxa, values_from=abundance)
+
+# Calculate Jensen-Shannon distance on standardized matrix
+JSDdist <- df.1c %>% select_if(is.numeric) %>%
+  wisconsin %>% as.matrix %>% 
+  philentropy::JSD(est.prob = "empirical") %>% sqrt
+
+# fit dbRDA constrained by treatment, conditioned on genotype
+(dbrda.treatment <- capscale(JSDdist~Condition(Genotype)+Treatment, data=df.1c))
+# get variance explained by the ordination axes
+dbrda.treatment.r2 <- (eigenvals(dbrda.treatment)/sum(eigenvals(dbrda.treatment))) %>% multiply_by(100) %>% round(1)
+# plot ordination
+(ordination.treatment <- fortify(dbrda.treatment,display="wa") %>%
+    filter(Score=="sites") %>% 
+    bind_cols(df.1c) %>%
+    group_by(Treatment) %>%
+    summarize(n=n(),x=mean(CAP1),y=mean(CAP2),sd1=sd(CAP1),sd2=sd(CAP2)) %>%
+    ggplot(aes(x=x,y=y,fill=Treatment)) +
+    geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
+    geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
+    geom_point(size=3.5,shape=21)+
+    scale_fill_manual("Initial\ncolonist",values=pal.treatment)+
+    guides(fill=guide_legend(nrow=3))+
+    coord_fixed(eigenvals(dbrda.treatment)[2]/eigenvals(dbrda.treatment)[1],
+                clip="off")+
+    labs(x=paste0("dbRDA1 [",dbrda.treatment.r2[1],"%]"),
+         y=paste0("dbRDA2 [",dbrda.treatment.r2[2],"%]"))+
+    ggthemes::theme_few()+
+    theme(legend.justification = "left",
+          legend.position = "none",
+          axis.title = element_text(size=12),
+          axis.text = element_text(size=10),
+          panel.border = element_rect(fill=NA, colour = "black", size=0.6)))
+
+########################################
+### Fig 1d - dbRDA of ecotype effect ###
+########################################
+
+# fit dbRDA constrained by genotype, conditioned on treatment
+(dbrda.genotype <- capscale(JSDdist~Condition(Treatment)+Genotype, data=df.1c))
+# get variance explained by the ordination axes
+dbrda.genotype.r2 <- (eigenvals(dbrda.genotype)/sum(eigenvals(dbrda.genotype))) %>% multiply_by(100) %>% round(1)
+#' plot ordination
+(ordination.genotype <- fortify(dbrda.genotype,display="wa") %>%
+    filter(Score=="sites") %>% 
+    bind_cols(df.1c) %>%
+    group_by(Genotype) %>%
+    summarize(n=n(),x=mean(CAP1),y=mean(CAP2),sd1=sd(CAP1),sd2=sd(CAP2)) %>%
+    left_join(sample_data(phy) %>%
+                data.frame %>%
+                dplyr::select(Genotype,Region) %>%
+                unique) %>%
+    ggplot(aes(x=x,y=y,fill=Region)) +
+    geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
+    geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
+    geom_point(size=3.5,shape=21)+
+    scale_fill_manual("Host\necotype", values=pal.region)+
+    coord_fixed(eigenvals(dbrda.genotype)[2]/eigenvals(dbrda.genotype)[1])+
+    labs(x=paste0("dbRDA1 [",dbrda.genotype.r2[1],"%]"),
+         y=paste0("dbRDA2 [",dbrda.genotype.r2[2],"%]"))+
+    guides(fill=guide_legend(nrow=2))+
+    theme_few()+
+    theme(legend.justification = "left",
+          legend.position = "none",
+          axis.title = element_text(size=12),
+          axis.text = element_text(size=10),
+          panel.border = element_rect(fill=NA, colour = "black", size=1)))
+
 ###########################################
 ### FIG 1A - Relative abundance heatmap ###
 ###########################################
@@ -55,26 +132,25 @@ df.1a <- df.tidy %>%
                          paste0("W<br>",stringr::str_sub(ID,-1))))
 
 # Set order of taxa based on relative abundance for platting
-taxa.order <- tapply(df.1a$abundance,df.1a$Taxa,median) %>% sort(decreasing = F) %>% names
+#taxa.order <- tapply(df.1a$abundance,df.1a$Taxa,median) %>% sort(decreasing = F) %>% names
+taxa.order <- c("Trichoderma", "Penicillium", "Epicoccum", "Fusarium",
+                "Dioszegia", "Cladosporium", "Aureobasidium", "Alternaria")
 df.1a$Taxa %<>% factor(levels=taxa.order)
 
-# Set order of genotypes for plotting. Uses 1-dimensional NMDS of community data within assembly history treatments.
-gt_order <- foreach(taxa=unique(df.1a$Treatment), .combine=c) %do% {
-  dat <- df.1a %>% filter(Treatment==taxa)
-  dat_wide <- dat %>% dplyr::select(ID,Taxa,normed) %>%
-    pivot_wider(names_from=Taxa, values_from=normed) 
-  nmds <- metaMDS(dat_wide[,-1],"manhattan",k=1,trymax=500)
-  ordered <- dat_wide$ID[order(scores(nmds))]
-  ifelse((sum(grepl("West",ordered)[1:4])>=3),
-         return(ordered),return(rev(ordered)))
-}  
+# Set order of genotypes for plotting 
+gt_order <- fortify(dbrda.genotype,display="wa") %>%
+  filter(Score=="sites") %>% 
+  bind_cols(df.1c) %>%
+  group_by(Genotype) %>%
+  summarize(n=n(),x=mean(CAP1),y=mean(CAP2),sd1=sd(CAP1),sd2=sd(CAP2)) %>%
+  arrange(x) %$% Genotype %>% paste(rep(unique(df.1a$Treatment),each=length(.)),.)
 df.1a$ID %<>% factor(levels=gt_order)  
 
 # Coordinates of focal taxa annotations
 focal.rect <- data.frame(Treatment=unique(df.1a$Treatment),
                              xmin=0.5,xmax=12.5,
-                             ymin=c(7.5,2.5,3.5,4.5,5.5),
-                             ymax=c(8.5,3.5,4.5,5.5,6.5))
+                             ymin=c(7.5,6.5,5.5,4.5,3.5),
+                             ymax=c(8.5,7.5,6.5,5.5,4.5))
 
 # Hack to add legend for panel d to x-axis without changing y-axis scale
 ggplot(data.frame(lab=c("western","eastern")),
@@ -84,7 +160,7 @@ ggplot(data.frame(lab=c("western","eastern")),
   scale_fill_manual(values=pal.region)+
   geom_text(aes(label=lab),hjust=-0.2)+
   theme_nothing()
-ggsave("output/figs/Fig.1.ecotypeHack.jpg",width=4.5,height=0.4,units = "cm")
+ggsave("output/figs/ecotypeHack.jpg",width=4.5,height=0.4,units = "cm")
 
 # Plot Fig 1a heatmap
 (fig1a <- ggplot(df.1a,aes(x=ID,y=Taxa))+
@@ -117,7 +193,7 @@ ggsave("output/figs/Fig.1.ecotypeHack.jpg",width=4.5,height=0.4,units = "cm")
                                 title.position="left"))+
     facet_wrap(~Treatment,scales="free_x",nrow=1) +
     labs(title="Initial colonist:\n",
-         x="Host ecotype: <img src='output/figs/Fig.1.ecotypeHack.jpg' width='150' />")+
+         x="Host ecotype: <img src='output/figs/ecotypeHack.jpg' width='150' />")+
     theme_minimal_grid()+
     theme(panel.grid.major = element_blank(),
           legend.position = "bottom",
@@ -131,8 +207,8 @@ ggsave("output/figs/Fig.1.ecotypeHack.jpg",width=4.5,height=0.4,units = "cm")
           axis.text.y = element_text(size=12,face="italic"),
           axis.text.x =  element_blank(),
           strip.text = element_blank(),
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11),
+          legend.text = element_text(size=10),
+          legend.title = element_text(size=12),
           plot.margin = unit(c(5.5,5.5,0,5.5), "pt")))
 
 ##########################################################
@@ -191,7 +267,7 @@ uni.dat %<>% mutate(xlabs=gsub("Region","Ecotype",predictor) %>%
                      breaks=c(0,0.25,0.5),labels=c("0.0","0.25","0.5"))+
     geom_text(aes(label=stars),size=5)+
     geom_richtext(data=filter(uni.dat,Taxon=="Alternaria"),
-                  aes(label=xlabs,y=0.4), size=2.95,
+                  aes(label=xlabs,y=0.4), size=3.2,
                   fill = NA, angle=90, hjust=1,vjust=0.5,
                   label.color = NA, lineheight=0)+
     geom_point(data=filter(uni.dat,Taxon=="Alternaria"),
@@ -211,97 +287,20 @@ uni.dat %<>% mutate(xlabs=gsub("Region","Ecotype",predictor) %>%
           axis.title = element_blank(),
           axis.text.y = element_blank(),
           axis.text.x =  element_blank(),
-          legend.text = element_text(size=9),
-          legend.title = element_markdown(size=11),
+          legend.text = element_text(size=10),
+          legend.title = element_markdown(size=12),
           plot.margin = unit(c(0,5.5,0,5.5), "pt")))
-
-#################################################
-### Fig 1c - dbRDA of initial colonist effect ###
-#################################################
-
-# Summarize and spread to wide format
-df.1c <- df.tidy %>% 
-  group_by(Region,Genotype,Treatment,Taxa) %>%
-  summarize(abundance=median(abundance)) %>%
-  ungroup %>%
-  pivot_wider(names_from = Taxa, values_from=abundance)
-
-# Calculate Jensen-Shannon distance on standardized matrix
-JSDdist <- df.1c %>% select_if(is.numeric) %>%
-  wisconsin %>% as.matrix %>% 
-  philentropy::JSD(est.prob = "empirical") %>% sqrt
-
-# fit dbRDA constrained by treatment, conditioned on genotype
-(dbrda.treatment <- capscale(JSDdist~Condition(Genotype)+Treatment, data=df.1c))
-# get variance explained by the ordination axes
-dbrda.treatment.r2 <- (eigenvals(dbrda.treatment)/sum(eigenvals(dbrda.treatment))) %>% multiply_by(100) %>% round(1)
-# plot ordination
-(ordination.treatment <- fortify(dbrda.treatment,display="wa") %>%
-    filter(Score=="sites") %>% 
-    bind_cols(df.1c) %>%
-    group_by(Treatment) %>%
-    summarize(n=n(),x=mean(CAP1),y=mean(CAP2),sd1=sd(CAP1),sd2=sd(CAP2)) %>%
-    ggplot(aes(x=x,y=y,fill=Treatment)) +
-    geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
-    geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
-    geom_point(size=3.5,shape=21)+
-    scale_fill_manual("Initial\ncolonist",values=pal.treatment)+
-    guides(fill=guide_legend(nrow=3))+
-    coord_fixed(eigenvals(dbrda.treatment)[2]/eigenvals(dbrda.treatment)[1],
-                clip="off")+
-    labs(x=paste0("dbRDA1 [",dbrda.treatment.r2[1],"%]"),
-         y=paste0("dbRDA2 [",dbrda.treatment.r2[2],"%]"))+
-    ggthemes::theme_few()+
-    theme(legend.justification = "left",
-          legend.position = "none",
-          legend.text = element_text(size=12,face="italic"),
-          axis.title = element_text(size=10),
-          axis.text = element_text(size=8)))
-
-########################################
-### Fig 1d - dbRDA of ecotype effect ###
-########################################
-
-# fit dbRDA constrained by genotype, conditioned on treatment
-(dbrda.genotype <- capscale(JSDdist~Condition(Treatment)+Genotype, data=df.1c))
-# get variance explained by the ordination axes
-dbrda.genotype.r2 <- (eigenvals(dbrda.genotype)/sum(eigenvals(dbrda.genotype))) %>% multiply_by(100) %>% round(1)
-#' plot ordination
-(ordination.genotype <- fortify(dbrda.genotype,display="wa") %>%
-    filter(Score=="sites") %>% 
-    bind_cols(df.1c) %>%
-    group_by(Genotype) %>%
-    summarize(n=n(),x=mean(CAP1),y=mean(CAP2),sd1=sd(CAP1),sd2=sd(CAP2)) %>%
-    left_join(sample_data(phy) %>%
-                data.frame %>%
-                dplyr::select(Genotype,Region) %>%
-                unique) %>%
-    ggplot(aes(x=x,y=y,fill=Region)) +
-    geom_errorbar(aes(ymin=y-sd2,ymax=y+sd2),width=0)+
-    geom_errorbarh(aes(xmin=x-sd1,xmax=x+sd1),height=0)+
-    geom_point(size=3.5,shape=21)+
-    scale_fill_manual("Host\necotype", values=pal.region)+
-    coord_fixed(eigenvals(dbrda.genotype)[2]/eigenvals(dbrda.genotype)[1])+
-    labs(x=paste0("dbRDA1 [",dbrda.genotype.r2[1],"%]"),
-         y=paste0("dbRDA2 [",dbrda.genotype.r2[2],"%]"))+
-    guides(fill=guide_legend(nrow=2))+
-    ggthemes::theme_few()+
-    theme(legend.justification = "left",
-          legend.position = "none",
-          legend.text = element_text(size=12),
-          axis.title = element_text(size=10),
-          axis.text = element_text(size=8)))
 
 ########################
 ### Compile Figure 1 ###
 ########################
 
 ((fig1a + fig1b + plot_layout(widths = c(5,1), ncol=2)) / 
-(ordination.treatment + ordination.genotype + plot_layout(ncol=2))) + plot_layout(heights=c(5,4)) +
-  plot_annotation(tag_levels = 'a',tag_prefix = "(",tag_suffix = ")") &
-  theme(plot.tag = element_text(size=12,face="bold"))
-ggsave("output/figs/Fig.1.pdf",units="cm",width=28,height=18)
-ggsave("MS/figs/Fig.1.jpg",units="cm",width=28,height=18)
+(ordination.treatment + ordination.genotype + plot_layout(ncol=2))) + 
+  plot_layout(heights=c(5,4)) +
+  plot_annotation(tag_levels = 'A') &
+  theme(plot.tag = element_text(size=14,face="bold"))
+ggsave("output/figs/Fig.2.pdf",units="cm",width=28,height=18)
 
 #Remove tmp file
-unlink("output/figs/Fig.1.ecotypeHack.jpg")
+unlink("output/figs/ecotypeHack.jpg")
