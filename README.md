@@ -1,6 +1,6 @@
 ## Repository notes
 
-This repository contains all of the code required to recreate the analyses presented the manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, currently in review. 
+This repository contains all of the code required to recreate the analyses presented the manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, ***Current Biology***, 2020. [pdf](https://dleopold.github.io/dleopold.github.io/files/pubs/Leopold,%20Busby%20-%202020%20-%20Host%20Genotype%20and%20Colonist%20Arrival%20Order%20Jointly%20Govern%20Plant%20Microbiome%20Composition%20and%20Function.pdf)
 
 Authors: Devin R. Leopold & Posy E. Busby
 
