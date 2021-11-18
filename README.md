@@ -8,7 +8,50 @@ Authors: Devin R. Leopold & Posy E. Busby
 
 Assuming all dependencies are available (see below), the entire workflow can be recreated by running recipies in the makefile, which will run the scripts in the `code/` folder in the proper order, writing all output to `output/`. The processed output of the bioinformatics processing of the raw Illumina marker gene sequencing (fungal ITS) is included, so it is also possible to skip the bioinformatic processing of the raw sequencing reads and skip directly to the data analysis. 
 
-### Dependencies
+*****
+
+#### Data processing
+
+  * [demux.config.json](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/demux.config.json)
+    * Define instructions for demultiplexing with Pheniqs.
+  * [trim.sh](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/trim.sh)
+    * Process demultiplexed Illumina data to trim gene primers and read-through contamination.
+  * [compile.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/compile.R)
+    * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
+  * [denoise.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/denoise.R)
+    * Denoise Illumina data to identify amplicon sequence variants with DADA2.
+
+#### Analysis
+
+  * [biasEstimates.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/biasEstimates.R)
+    * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
+  * [jsdModels.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/jsdModels.R)
+    * Multvariate test using joint species distribution models with mvabund.
+  * [priorityEffects.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/priorityEffects.R)
+    * Explore the benefit of preemptive colonization for the fungal species used as early colonists in the immigration history treatments.
+  * [rustAnalyses.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustAnalyses.R)
+    * Test effects of experimental treatments on leaf rust severity and make corresponding figures.
+  * [rustCor.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustCor.R)
+    * Explore possible correlations between relative abundance of foliar fungi and rust severity.
+  * [rustSusceptibility.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustSusceptibility.R)
+    * Look at baseline rust susceptibility in uninoculated plants.
+    
+#### Figures
+  * [communityFigure.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/communityFigure.R)
+    * Make the multi-panel figure of variation in community composition.
+  * [mapFigS1.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/mapFigS1.R) 
+    * make map showing geographic origins of *P. trichocarpa* genotypes.
+
+#### Other 
+
+  * [colors.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/colors.R)
+    * Define color palettes used in figures.
+  * [Rfunctions.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/Rfunctions.R)
+    * Some custom R functions used by other scripts.
+
+*****
+
+#### Dependencies
 
 Larger data files are not included in the repository and need to be downloaded in order to reproduce the bioinformatics workflow. 
 
@@ -57,38 +100,3 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
   * ShortRead (v1.44.3)
   * tidyverse (v1.3)
   * vegan (v2.5-6)
-
-### Descriptions of code
-  * [biasEstimates.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/biasEstimates.R)
-    * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
-  * [colors.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/colors.R)
-    * Define color palettes used in figures.
-  * [communityFigure.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/communityFigure.R)
-    * Make multi-panel figure of variation in community composition.
-  * [compile.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/compile.R)
-    * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
-  * [demux.config.json](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/demux.config.json)
-    * Define instructions for demultiplexing with Pheniqs.
-  * [denoise.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/denoise.R)
-    * Denoise Illumina data to identify amplicon sequence variants with DADA2.
-  * [jsdModels.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/jsdModels.R)
-    * Multvariate test using joint species distribution models with mvabund.
-  * [mapFigS1.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/mapFigS1.R) 
-    * make map showing geographic origins of *P. trichocarpa* genotypes.
-  * [priorityEffects.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/priorityEffects.R)
-    * Explore the bennefit of preemptive colonization for the fungal species used as early colonists in the immigration history treatments.
-  * [Rfunctions.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/Rfunctions.R)
-    * Some custom R functions used by other scripts.
-  * [rustAnalyses.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustAnalyses.R)
-    * Test effects of experimental treatments on leaf rust severity and make corresponding figures.
-  * [rustCor.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustCor.R)
-    * Explore possible correlations between relative abundance of foliar fungi and rust severity.
-  * [rustSusceptibility.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustSusceptibility.R)
-    * Look at baseline rust susceptibiliy in uninoculated plants.
-  * [trim.sh](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/trim.sh)
-    * Process demultiplexed Illumina data to trim gene primers and read-through contamination.
-
-    
-
-
-
