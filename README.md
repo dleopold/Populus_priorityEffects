@@ -63,7 +63,7 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
     * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
   * [colors.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/colors.R)
     * Define color palettes used in figures.
-  * [comunityFigure.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/comunityFigure.R)
+  * [communityFigure.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/communityFigure.R)
     * Make multi-panel figure of variation in community composition.
   * [compile.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/compile.R)
     * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
