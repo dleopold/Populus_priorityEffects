@@ -1,19 +1,19 @@
 ## Repository notes
 
-This repository contains all of the code required to recreate the analyses presented the manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, ***Current Biology***, 2020. [pdf](https://dleopold.github.io/dleopold.github.io/files/pubs/Leopold,%20Busby%20-%202020%20-%20Host%20Genotype%20and%20Colonist%20Arrival%20Order%20Jointly%20Govern%20Plant%20Microbiome%20Composition%20and%20Function.pdf)
+This repository contains all of the code required to recreate the analyses presented the manuscript, *Joint effects of host genotype and species arrival order determine plant microbiome composition and function*, ***Current Biology***, 2020. [pdf](https://dleopold.github.io/files/pubs/Leopold,%20Busby%20-%202020%20-%20Host%20Genotype%20and%20Colonist%20Arrival%20Order%20Jointly%20Govern%20Plant%20Microbiome%20Composition%20and%20Function.pdf)
 
 Authors: Devin R. Leopold & Posy E. Busby
 
 
 
-Assuming all dependencies are available (see below), the entire workflow can be recreated by running recipies in the makefile, which will run the scripts in the `code/` folder in the proper order, writing all output to `output/`. The processed output of the bioinformatics processing of the raw Illumina marker gene sequencing (fungal ITS) is included, so it is possible to skip the bioinformatic processing of the raw sequencing reads and skip directly to the data analysis. 
+Assuming all dependencies are available (see below), the entire workflow can be recreated by running recipies in the makefile, which will run the scripts in the `code/` folder in the proper order, writing all output to `output/`. The processed output of the bioinformatics processing of the raw Illumina marker gene sequencing (fungal ITS) is included, so it is also possible to skip the bioinformatic processing of the raw sequencing reads and skip directly to the data analysis. 
 
 ### Dependencies
 
 Larger data files are not included in the repository and need to be downloaded in order to reproduce the bioinformatics workflow. 
 
 * Raw MiSeq data
-  * Download the raw MiSeq data in fastq format from the NCBI Sequence Read Archive, BioProjuect ID [PRJNA605581](https://www.ncbi.nlm.nih.gov/bioproject/605581)
+  * Download the raw MiSeq data in fastq format from the NCBI Sequence Read Archive, BioProject ID [PRJNA605581](https://www.ncbi.nlm.nih.gov/bioproject/605581)
   * The fastq files should be placed in a folder in the project directory, `output/demux/`.
 Because the archived files are demultiplexed, the initial demultiplexing step in the makefile, `make demux`, is not necessary.
 
@@ -59,33 +59,33 @@ Because the archived files are demultiplexed, the initial demultiplexing step in
   * vegan (v2.5-6)
 
 ### Descriptions of code
-  * biasEstimates.R
+  * [biasEstimates.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/biasEstimates.R)
     * Use mock community data to estimate taxon specific biases in the Illumina sequence data.
-  * colors.R
-    * Define color paletts used in figures.
-  * comunityFigure.R
-    * Make multipanel figure of variation in community composition.
-  * compile.R
+  * [colors.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/colors.R)
+    * Define color palettes used in figures.
+  * [comunityFigure.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/comunityFigure.R)
+    * Make multi-panel figure of variation in community composition.
+  * [compile.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/compile.R)
     * Process denoised Illumina data to prepare for analysis. Includes removing host contamination, collapsing denoised sequence variants to 99% OTUs, identifying focal taxa, and removing samples with poor coverage.
-  * demux.config.json
+  * [demux.config.json](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/demux.config.json)
     * Define instructions for demultiplexing with Pheniqs.
-  * denoise.R
+  * [denoise.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/denoise.R)
     * Denoise Illumina data to identify amplicon sequence variants with DADA2.
-  * jsdModels.R
+  * [jsdModels.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/jsdModels.R)
     * Multvariate test using joint species distribution models with mvabund.
-  * mapFigS1.R 
+  * [mapFigS1.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/mapFigS1.R) 
     * make map showing geographic origins of *P. trichocarpa* genotypes.
-  * priorityEffects.R
+  * [priorityEffects.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/priorityEffects.R)
     * Explore the bennefit of preemptive colonization for the fungal species used as early colonists in the immigration history treatments.
-  * Rfunctions.R
+  * [Rfunctions.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/Rfunctions.R)
     * Some custom R functions used by other scripts.
-  * rustAnalyses.R
+  * [rustAnalyses.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustAnalyses.R)
     * Test effects of experimental treatments on leaf rust severity and make corresponding figures.
-  * rustCor.R
+  * [rustCor.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustCor.R)
     * Explore possible correlations between relative abundance of foliar fungi and rust severity.
-  * rustSusceptibility.R
+  * [rustSusceptibility.R](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/rustSusceptibility.R)
     * Look at baseline rust susceptibiliy in uninoculated plants.
-  * trim.sh
+  * [trim.sh](https://github.com/dleopold/Populus_priorityEffects/blob/master/code/trim.sh)
     * Process demultiplexed Illumina data to trim gene primers and read-through contamination.
 
     
